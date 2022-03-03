@@ -1,7 +1,32 @@
+import subprocess
+import sys
+import os
 import pandas as pd
-
+import json
 from modules.html_template import *
 
+def open_files(Teststelle):
+    if Teststelle == "Altdorf":
+        files = ["./Altdorf/ALD_Schnelltests.html","./Altdorf/ALD_PCRs.html","./Altdorf/Listen/ALD_Liste_PCR.xlsx","./Altdorf/Listen/ALD_Liste_Schnell.xlsx"]
+    elif Teststelle == "Lauf":
+        files = ["./Lauf/LAU_Schnelltests.html","./Lauf/LAU_PCRs.html","./Lauf/Listen/LAU_Liste_PCR.xlsx","./Lauf/Listen/LAU_Liste_Schnell.xlsx"]
+    elif Teststelle == "Hersbruck":
+        files = ["./Hersbruck/HEB_Schnelltests.html","./Hersbruck/HEB_PCRs.html","./Hersbruck/Listen/HEB_Liste_PCR.xlsx","./Hersbruck/Listen/HEB_Liste_Schnell.xlsx"]
+    for file in files:
+        if sys.platform == 'linux':
+            subprocess.call(["xdg-open",file])
+        else:
+            os.system("start " + file)
+
+def store_reasons_dict(reasons_dict):
+    with open('./modules/testgruende.json', 'w') as f:
+        json.dump(reasons_dict, f)
+
+def load_reasons_dict():
+    with open('./modules/testgruende.json') as f:
+        reasons_dict = json.load(f)
+        return reasons_dict
+    
 def replace_all(html_text, dic):
     """
     Tauscht im HTML Template Keywords mit den echten Daten des Dictionaries
@@ -57,7 +82,6 @@ def filter_df_by_time(df, starttime=1700, endtime=1900):
     endtime = int(endtime)
     for i in range(len(df)):
         if (df.loc[i, "Termine_copy"]) < starttime or (df.loc[i, "Termine_copy"]) > endtime:
-            print("Dropped: ", df.loc[i, "Termine_copy"])
             df.drop(index=i, inplace=True)
     return df
 
@@ -192,15 +216,12 @@ def duplicates_of_persons(df):
     """
     Counts the amount of times a person with the same name is in the Dataframe and returns a list of people where the amount is bigger than 1
     """
-    name_series = df['GF_Vorname'].apply(str.lower) + " " + df['GF_Familienname'].apply(str.lower)
+    name_series = df['GF_Vorname'].apply(str.lower) + " " + df['GF_Familienname'].apply(str.lower) + " " + df["Ressource"]
     counted_persons = name_series.value_counts()
     counted_persons = counted_persons.where(counted_persons > 1)
     counted_persons.dropna(inplace=True)
-
-    print(counted_persons)
     return counted_persons
 
 def find_testgruende(df):
     reasons = df["Testgrund"].value_counts()
-    print(reasons)
     return reasons
