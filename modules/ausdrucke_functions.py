@@ -3,14 +3,12 @@ import sys
 import os
 import pandas as pd
 import json
-from pathlib import Path
 from modules.html_template import *
 
 def create_needed_folders():
-    folders = ["Altdorf", "Hersbruck", "Lauf","Altdorf/Listen", "Hersbruck/Listen", "Lauf/Listen", "Logs", "Export"]
+    folders = [r"./Altdorf", r"./Hersbruck", r"./Lauf",r"./Altdorf/Listen", r"./Hersbruck/Listen", r"./Lauf/Listen", r"./Logs", r"./Export"]
     for folder in folders:
-        if not os.path.exists(folder):
-            Path(folder).mkdir(parents=True, exist_ok=True)
+        os.makedirs(folder, exist_ok=True)
 
 
 def open_files(Teststelle):
