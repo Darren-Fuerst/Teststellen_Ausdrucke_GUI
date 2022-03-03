@@ -3,7 +3,15 @@ import sys
 import os
 import pandas as pd
 import json
+from pathlib import Path
 from modules.html_template import *
+
+def create_needed_folders():
+    folders = ["Altdorf", "Hersbruck", "Lauf","Altdorf/Listen", "Hersbruck/Listen", "Lauf/Listen", "Logs", "Export"]
+    for folder in folders:
+        if not os.path.exists(folder):
+            Path(folder).mkdir(parents=True, exist_ok=True)
+
 
 def open_files(Teststelle):
     if Teststelle == "Altdorf":
