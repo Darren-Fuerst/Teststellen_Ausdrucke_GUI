@@ -19,6 +19,9 @@ fh.setFormatter(formatter)
 
 logger.addHandler(fh)
 
+#folder checken
+create_needed_folders()
+
 #globally accessable across all windows
 df = pd.DataFrame()
 
@@ -64,7 +67,11 @@ while True:
 
     
 # Testgruende laden
-dict_reasons = load_reasons_dict()
+try:
+    dict_reasons = load_reasons_dict()
+except Exception as e:
+    logger.error(e)
+    print(e)
 
 reasons_layout= []
 longest_reason = "bla"
@@ -139,48 +146,55 @@ while True:
         exit()
 
 #store testgruende
-store_reasons_dict(dict_reasons)
+try:
+    store_reasons_dict(dict_reasons)
+except Exception as e:
+    logger.error(e)
+    print(e)
 
 
 # filtert und befüllt die 6 DataFrames
 #tuple unpacking nötig
-(df_hersbruck, df_hersbruck_pcr, df_altdorf, df_altdorf_pcr, df_lauf, df_lauf_pcr) = split_df_teststellen(df)
+try:
+    (df_hersbruck, df_hersbruck_pcr, df_altdorf, df_altdorf_pcr, df_lauf, df_lauf_pcr) = split_df_teststellen(df)
 
-generate_html(df_hersbruck, "./Hersbruck/HEB_Schnelltests", dict_reasons)
-generate_html(df_hersbruck_pcr, "./Hersbruck/HEB_PCRs", dict_reasons)
-generate_html(df_altdorf, "./Altdorf/ALD_Schnelltests", dict_reasons)
-generate_html(df_altdorf_pcr, "./Altdorf/ALD_PCRs", dict_reasons)
-generate_html(df_lauf, "./Lauf/LAU_Schnelltests", dict_reasons)
-generate_html(df_lauf_pcr, "./Lauf/LAU_PCRs", dict_reasons)
+    generate_html(df_hersbruck, "./Hersbruck/HEB_Schnelltests", dict_reasons)
+    generate_html(df_hersbruck_pcr, "./Hersbruck/HEB_PCRs", dict_reasons)
+    generate_html(df_altdorf, "./Altdorf/ALD_Schnelltests", dict_reasons)
+    generate_html(df_altdorf_pcr, "./Altdorf/ALD_PCRs", dict_reasons)
+    generate_html(df_lauf, "./Lauf/LAU_Schnelltests", dict_reasons)
+    generate_html(df_lauf_pcr, "./Lauf/LAU_PCRs", dict_reasons)
 
-df_hersbruck = remove_columns(df_hersbruck)
-df_hersbruck_pcr = remove_columns(df_hersbruck_pcr)
-df_altdorf = remove_columns(df_altdorf)
-df_altdorf_pcr = remove_columns(df_altdorf_pcr)
-df_lauf = remove_columns(df_lauf)
-df_lauf_pcr = remove_columns(df_lauf_pcr)
+    df_hersbruck = remove_columns(df_hersbruck)
+    df_hersbruck_pcr = remove_columns(df_hersbruck_pcr)
+    df_altdorf = remove_columns(df_altdorf)
+    df_altdorf_pcr = remove_columns(df_altdorf_pcr)
+    df_lauf = remove_columns(df_lauf)
+    df_lauf_pcr = remove_columns(df_lauf_pcr)
 
-df_hersbruck = replace_headers(df_hersbruck)
-df_hersbruck_pcr = replace_headers(df_hersbruck_pcr)
-df_altdorf = replace_headers(df_altdorf)
-df_altdorf_pcr = replace_headers(df_altdorf_pcr)
-df_lauf = replace_headers(df_lauf)
-df_lauf_pcr = replace_headers(df_lauf_pcr)
+    df_hersbruck = replace_headers(df_hersbruck)
+    df_hersbruck_pcr = replace_headers(df_hersbruck_pcr)
+    df_altdorf = replace_headers(df_altdorf)
+    df_altdorf_pcr = replace_headers(df_altdorf_pcr)
+    df_lauf = replace_headers(df_lauf)
+    df_lauf_pcr = replace_headers(df_lauf_pcr)
 
-df_hersbruck = add_last_two_cols(df_hersbruck)
-df_hersbruck_pcr = add_last_two_cols(df_hersbruck_pcr)
-df_altdorf = add_last_two_cols(df_altdorf)
-df_altdorf_pcr = add_last_two_cols(df_altdorf_pcr)
-df_lauf = add_last_two_cols(df_lauf)
-df_lauf_pcr = add_last_two_cols(df_lauf_pcr)
+    df_hersbruck = add_last_two_cols(df_hersbruck)
+    df_hersbruck_pcr = add_last_two_cols(df_hersbruck_pcr)
+    df_altdorf = add_last_two_cols(df_altdorf)
+    df_altdorf_pcr = add_last_two_cols(df_altdorf_pcr)
+    df_lauf = add_last_two_cols(df_lauf)
+    df_lauf_pcr = add_last_two_cols(df_lauf_pcr)
 
-print_to_excel(df_hersbruck, "./Hersbruck/Listen/HEB_Liste_Schnell")
-print_to_excel(df_hersbruck_pcr, "./Hersbruck/Listen/HEB_Liste_PCR")
-print_to_excel(df_altdorf, "./Altdorf/Listen/ALD_Liste_Schnell")
-print_to_excel(df_altdorf_pcr, "./Altdorf/Listen/ALD_Liste_PCR")
-print_to_excel(df_lauf, "./Lauf/Listen/LAU_Liste_Schnell")
-print_to_excel(df_lauf_pcr, "./Lauf/Listen/LAU_Liste_PCR")
+    print_to_excel(df_hersbruck, "./Hersbruck/Listen/HEB_Liste_Schnell")
+    print_to_excel(df_hersbruck_pcr, "./Hersbruck/Listen/HEB_Liste_PCR")
+    print_to_excel(df_altdorf, "./Altdorf/Listen/ALD_Liste_Schnell")
+    print_to_excel(df_altdorf_pcr, "./Altdorf/Listen/ALD_Liste_PCR")
+    print_to_excel(df_lauf, "./Lauf/Listen/LAU_Liste_Schnell")
+    print_to_excel(df_lauf_pcr, "./Lauf/Listen/LAU_Liste_PCR")
 
+except Exception as e:
+    logger.error(e)
 
 duplicated_persons_layout = []
 duplicated_persons_layout.append([sg.Text("Personen:", size=(50, 1)), sg.Text("Häufigkeit:", size=(20, 1))])
