@@ -30,8 +30,8 @@ sg.theme('DarkAmber')   # Add a touch of color
 layout1 = [
          [ # ---- New row
             sg.Text('Girona-Export auswählen:', size=(28, 1)), 
-            sg.InputText(key="csv-export"), 
-            sg.FileBrowse(target="csv-export") 
+            sg.InputText("./Export/Covid+19-Anmeldungen.csv", key="csv-export"), 
+            sg.FileBrowse(target="csv-export")
         ],
         #whitespace
         [sg.Text("", size=(50,5))],
@@ -41,8 +41,6 @@ layout1 = [
         ]
     ]
 
-#globally accessible
-duplicated_persons = []
     
 window = sg.Window('Teststellen Ausdrucke', size=window_size).Layout(layout1)
 while True:
@@ -54,7 +52,6 @@ while True:
             df = pd.read_csv(CSV_LOCATION,encoding='latin1' ,dtype='str' ,sep=';', header=0)
             df = cutoff_two_appointments(df)
             reasons = find_testgruende(df)
-            duplicated_persons = duplicates_of_persons(df)
             break
         except FileNotFoundError:
             sg.Popup('Upsi!', 'Sicher, dass du den Export bereits ausgewählt hast?')
@@ -63,6 +60,11 @@ while True:
             sg.Popup(e)
     elif event == sg.WIN_CLOSED:
         exit()
+
+
+    
+# Testgruende laden
+dict_reasons = load_reasons_dict()
 
 reasons_layout= []
 longest_reason = "bla"
@@ -73,14 +75,18 @@ for i in reasons.index:
         prev = longest_reason
 
 for i in list(reasons.index):
-    reasons_layout.append([sg.Text(i, size=(len(longest_reason), 1)), sg.InputText("", size=(15,1), key=i) ])
-    
+    try:
+        reason = dict_reasons[i]
+    except KeyError:
+        reason = ""
+    reasons_layout.append([sg.Text(i, size=(len(longest_reason), 1)), sg.InputText(reason, size=(15,1), key=i) ])
+
 
 
 layout2 = [
      
         [
-            sg.Text("Hier die Startzeit und Endzeit eingeben.Das Format ist Militärformat also zum Beispiel: 17:30 -> 1730, 09:00 -> 0900")
+            sg.Text("Hier die Startzeit und Endzeit eingeben.\n\n Das Format ist Militärformat also zum Beispiel: 17:30 -> 1730, 09:00 -> 0900"), sg.Text("",size=(1,4))
         ],
         [   
             
@@ -89,6 +95,9 @@ layout2 = [
         ],
         #whitespace
         [sg.Text("", size=(50,5))],
+        [
+            sg.Text("Folgende Testgründe wurden heute angemeldet. \n\n Prüfe nach, ob diese stimmen:", size=(600, 4))
+        ],
         [
             reasons_layout
         ],
@@ -100,9 +109,8 @@ layout2 = [
         ]
 
 #globally accessible
-dict_reasons = {}
 (df_hersbruck, df_hersbruck_pcr, df_altdorf, df_altdorf_pcr, df_lauf, df_lauf_pcr) = (0,0,0,0,0,0)
-
+duplicated_persons = []
 window.close()
 window = sg.Window('Teststellen Ausdrucke', size=window_size).Layout(layout2)
 while True:
@@ -110,22 +118,30 @@ while True:
     if event == "Weiter":
         try:
             startzeit = (values["Startzeit"])
-            endzeit = (values["Endzeit"])   
-            print(startzeit, endzeit)
+            endzeit = (values["Endzeit"])
+            if startzeit > endzeit:
+                raise Exception("Startzeit ist größer als Endzeit")   
             df = sort_df_ascending(df)
             df = filter_df_by_time(df, starttime=startzeit, endtime=endzeit)
-
+            duplicated_persons = duplicates_of_persons(df)
             for i in reasons.index:
                 dict_reasons[i] = values[i] 
             break
         except TypeError:
             sg.Popup('Upsi!', 'Hast du sicher die Uhrzeit in Militärformat angegeben?')
+        except ValueError:
+            sg.Popup('Upsi!', 'Hast du vergessen die Start- und Endzeit einzugeben?')
         except Exception as e:
             logger.error(e)
             sg.Popup(e)
 
     elif event == sg.WIN_CLOSED:
         exit()
+
+#store testgruende
+store_reasons_dict(dict_reasons)
+
+
 # filtert und befüllt die 6 DataFrames
 #tuple unpacking nötig
 (df_hersbruck, df_hersbruck_pcr, df_altdorf, df_altdorf_pcr, df_lauf, df_lauf_pcr) = split_df_teststellen(df)
@@ -166,22 +182,24 @@ print_to_excel(df_lauf, "./Lauf/Listen/LAU_Liste_Schnell")
 print_to_excel(df_lauf_pcr, "./Lauf/Listen/LAU_Liste_PCR")
 
 
-
 duplicated_persons_layout = []
+duplicated_persons_layout.append([sg.Text("Personen:", size=(50, 1)), sg.Text("Häufigkeit:", size=(20, 1))])
 for i in  range(len(duplicated_persons)):
-    duplicated_persons_layout.append([sg.Text(duplicated_persons.index[i], size=(20, 1)), sg.Text(int(duplicated_persons[i]), size=(15,1))])
+    duplicated_persons_layout.append([sg.Text(duplicated_persons.index[i], size=(50, 1)), sg.Text(int(duplicated_persons[i]), size=(15,1))])
 
 layout3 = [
-    [
-        sg.Text("Hier sind die Personen aufgelistet die öfter vorkamen:")
-    ],
+        [
+            sg.Text("Hier sind die Personen aufgelistet die öfter vorkamen:")
+        ],
         [
             duplicated_persons_layout
         ],
 
         #whitespace
         [sg.Text("", size=(50,5))],
-
+        [
+            sg.Text("Hier kannst du direkt alle Dateien für die jeweilige Teststelle öffnen:", size=(800,2))
+        ],
         [
             [sg.Button("Hersbruck", size=(15,2)), sg.Button("Altdorf", size=(15,2)), sg.Button("Lauf", size=(15,2))]
         ],
@@ -205,6 +223,11 @@ while True:
         except Exception as e:
             logger.error(e)
             sg.Popup(e)
-
+    elif event == "Altdorf":
+        open_files("Altdorf")
+    elif event == "Hersbruck":
+        open_files("Hersbruck")
+    elif event == "Lauf":
+        open_files("Lauf")
     elif event == sg.WIN_CLOSED:
         exit()
