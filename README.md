@@ -5,6 +5,7 @@
 * Es muss zuerst Python installiert sein (Haken bei PATH machen) https://www.python.org/downloads/
 * Git mit Bash(Kann im Installationsmenü angegeben werden) https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
+-----------------------------------------------------------------------------------------------
 ### Installation:
 * Python installieren
 * Git mit Bash installieren
@@ -15,8 +16,12 @@
  ``` 
  * autoupdate.sh laufen lassen, um die benötigten Python Module zu installieren.
  
+ -----------------------------------------------------------------------------------------------
+ 
  ### Benutzung:
  * Es muss lediglich im Ordner "Teststellen_Ausdrucke_GUI" die Datei "Teststelle_Ausdrucke.py" gestartet werden.
+ 
+ -----------------------------------------------------------------------------------------------
  
 ### Benutzte Python-Module:
 ```
@@ -28,6 +33,8 @@ os
 pandas
 json
 ```
+
+-----------------------------------------------------------------------------------------------
 
 ### Folgende Module müssen installiert werden wie folgt:
 ```
