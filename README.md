@@ -9,9 +9,15 @@
 * Python installieren
 * Git mit Bash installieren
 * Auf lokalem PC dort wo der Skript Ordner sein soll ein Konsolenfenster öffnen und folgendes laufen lassen:
- ``` git clone https://github.com/Darren-Fuerst/Teststellen_Ausdrucke_GUI.git ``` 
- 
 
+ ``` 
+ git clone https://github.com/Darren-Fuerst/Teststellen_Ausdrucke_GUI.git 
+ ``` 
+ * autoupdate.sh laufen lassen, um die benötigten Python Module zu installieren.
+ 
+ ### Benutzung:
+ * Es muss lediglich im Ordner "Teststellen_Ausdrucke_GUI" die Datei "Teststelle_Ausdrucke.py" gestartet werden.
+ 
 ### Benutzte Python-Module:
 ```
 pysimplegui
