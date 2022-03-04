@@ -19,7 +19,8 @@
  -----------------------------------------------------------------------------------------------
  
  ### Benutzung:
- * Es muss lediglich im Ordner "Teststellen_Ausdrucke_GUI" die Datei "Teststelle_Ausdrucke.py" gestartet werden.
+ * Es muss lediglich im Ordner "Teststellen_Ausdrucke_GUI" die Datei "Teststelle_Ausdrucke.py" gestartet werden
+ * Zusätzlich sollte das Standardprogramm für Excel-Dateien und für HTML-Dateien festgelegt sein, um Sie automatisch zu öffnen
  
  -----------------------------------------------------------------------------------------------
  
