@@ -29,7 +29,8 @@ html_head = '''<!DOCTYPE html>
 </head>
 <body>'''
 
-html_page_template = '''<div class="page-marker hidden-print" style="word-wrap: break-word; margin-bottom: 20px; margin-left: auto; margin-right: auto; width: 700px; padding-bottom: 15px; border :1px solid black;  box-shadow: 10px 10px 8px #888888;">
+html_page_template = '''<body>
+    <div class="page-marker hidden-print" style="word-wrap: break-word; margin-bottom: 20px; margin-left: auto; margin-right: auto; width: 700px; padding-bottom: 15px; border :1px solid black;  box-shadow: 10px 10px 8px #888888;">
     <div style="margin: auto; page-break-after: always;width: 683px;">
         <h1 style="text-align: center;padding-bottom: 15px;">Registrierung von Personen gem. §7 Abs. 5 TestV</h1>
         
@@ -93,7 +94,27 @@ html_page_template = '''<div class="page-marker hidden-print" style="word-wrap: 
               </tr>
               <tr>
                 <td class="tg-186s"> Befund bzw.<br>PCR-Code</td>
-                <td class="tg-0pky"></td>
+                <td class="tg-0pky">
+                    <table style="width: 80%; margin: auto;">
+                        <tr>
+                        <td style="width: 20px;">
+                            
+                        </td>
+                        
+                        <td style="border: none;" >
+                            negativ
+                        </td> 
+
+                        <td style="width: 20px; ">
+                               
+                        </td>
+
+                        <td style="border: none;">
+                            positiv
+                        </td>
+                        </tr>
+                    </table>
+                    </td>
               </tr>
               <tr>
                 <td class="tg-y698"></td>
