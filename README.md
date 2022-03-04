@@ -2,8 +2,8 @@
 ## GUI Programm um die Ausdrucke in den Teststellen zu generieren
 
 ### Für das autoupdate.sh:
-* Es muss zuerst Python installiert sein (Haken bei PATH machen)
-* Git mit Bash(Kann im Installationsmenü angegeben werden)
+* Es muss zuerst Python installiert sein (Haken bei PATH machen) https://www.python.org/downloads/
+* Git mit Bash(Kann im Installationsmenü angegeben werden) https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 
 ### Benutzte Python-Module:
 ```
