@@ -36,8 +36,3 @@ json
 
 -----------------------------------------------------------------------------------------------
 
-### Folgende Module müssen installiert werden wie folgt:
-```
-pip install pysimplegui
-pip install pandas
-```
