@@ -129,8 +129,9 @@ def print_to_excel(df, name):
     name: name to be used in file name
     """
     df.index = list(range(1, len(df) + 1))
-    df.to_excel(r''+ name+'.xlsx')
-
+    with pd.ExcelWriter(r''+ name+'.xlsx') as writer:
+        df.to_excel(writer)
+    
 def define_ressource(ressource):
     if ressource == "Hersbruck Schnelltest" or ressource == "Hersbruck PCR-Test":
             ressource = "Testzentrum Hersbruck"
