@@ -1,18 +1,12 @@
 # Teststellen_Ausdrucke_GUI
 ## GUI Programm um die Ausdrucke in den Teststellen zu generieren
 
-### Für das setup_dependencies.sh:
+### Für das autoupdate.sh:
 * Es muss zuerst Python installiert sein (Haken bei PATH machen) https://www.python.org/downloads/
 * Git mit Bash(Kann im Installationsmenü angegeben werden) https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 -----------------------------------------------------------------------------------------------
-### Auto-Update einrichten:
-* Einen Ordner höher im Verzeichnis ein Bash Script (z.B autoupdate.sh) anfertigen, mit folgendem Befehl:
-```
-#! bin/bash
-
- git clone https://github.com/Darren-Fuerst/Teststellen_Ausdrucke_GUI.git
-```
-* Um das Programm zu updaten lediglich den Ordner "Teststellen_Ausdrucke_GUI" löschen und doppelklick auf die autoupdate.sh Datei
+### Auto-Update:
+* autupdate.sh ausführen im "Teststellen_Ausdrucke_GUI" Ordner
 
 -----------------------------------------------------------------------------------------------
 ### Installation:
@@ -23,7 +17,7 @@
  ``` 
  git clone https://github.com/Darren-Fuerst/Teststellen_Ausdrucke_GUI.git 
  ``` 
- * setup_dependencies.sh laufen lassen, um die benötigten Python Module zu installieren.
+ * autoupdate.sh laufen lassen, um die benötigten Python Module zu installieren.
  
  -----------------------------------------------------------------------------------------------
  
