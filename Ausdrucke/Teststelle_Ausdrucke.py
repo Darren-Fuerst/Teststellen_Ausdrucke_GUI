@@ -88,6 +88,8 @@ for i in list(reasons.index):
         reason = ""
     reasons_layout.append([sg.Text(i, size=(len(longest_reason), 1)), sg.InputText(reason, size=(15,1), key=i) ])
 
+if len(reasons_layout) == 0:
+    reasons_layout.append([sg.Text("Heute wurden keine Testgründe im Girona-Export entdeckt!")])
 
 
 layout2 = [
@@ -201,6 +203,9 @@ duplicated_persons_layout.append([sg.Text("Personen:", size=(50, 1)), sg.Text("H
 for i in  range(len(duplicated_persons)):
     duplicated_persons_layout.append([sg.Text(duplicated_persons.index[i], size=(50, 1)), sg.Text(int(duplicated_persons[i]), size=(15,1))])
 
+if len(duplicated_persons_layout) == 1:
+    duplicated_persons_layout.append(sg.Text("Heute kamen keine Doppelanmeldungen vor!"))
+
 layout3 = [
         [
             sg.Text("Hier sind die Personen aufgelistet die öfter vorkamen:")
@@ -211,6 +216,23 @@ layout3 = [
 
         #whitespace
         [sg.Text("", size=(50,5))],
+        
+        [
+            sg.Text("Hier siehst du die Testzahlen auf den ersten Blick:")
+        ],
+        [
+            sg.Text("Hersbruck:", size=(18,2)), sg.Text("Altdorf:", size=(18,2)), sg.Text("Lauf:", size=(18,2))
+        ],
+        [
+            sg.Text("PCR: " + str(len(df_hersbruck_pcr)), size=(18,2)), sg.Text("PCR: " + str(len(df_altdorf_pcr)), size=(18,2)), sg.Text("PCR: " + str(len(df_lauf_pcr)), size=(18,2))
+        ],
+        [
+            sg.Text("Schnelltests: " + str(len(df_hersbruck)), size=(18,2)), sg.Text("Schnelltests: " + str(len(df_altdorf)), size=(18,2)), sg.Text("Schnelltests: " + str(len(df_lauf)), size=(18,2))
+        ],
+
+        #whitespace
+        [sg.Text("", size=(50,5))],
+
         [
             sg.Text("Hier kannst du direkt alle Dateien für die jeweilige Teststelle öffnen:", size=(800,2))
         ],
@@ -225,6 +247,8 @@ layout3 = [
             sg.Button("Beenden", size=(15,2))
     ]
 ]
+
+print(len(df_hersbruck))
 
 window.close()
 window = sg.Window('Teststellen Ausdrucke',size=window_size).Layout(layout3)
