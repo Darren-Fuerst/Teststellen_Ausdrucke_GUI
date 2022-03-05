@@ -28,12 +28,26 @@ df = pd.DataFrame()
 # aufzählen der Tesgründe
 reasons = []
 
+
+    
+# Testgruende laden
+try:
+    dict_reasons = load_reasons_dict()
+except Exception as e:
+    logger.error(e)
+    print(e)
+
+try:
+    last_saved_location = dict_reasons["last-csv-export-location"]
+except:
+    last_saved_location = ""
+
 sg.theme('DarkAmber')   # Add a touch of color
 
 layout1 = [
          [ # ---- New row
             sg.Text('Girona-Export auswählen:', size=(28, 1)), 
-            sg.InputText("./Export/Covid+19-Anmeldungen.csv", key="csv-export"), 
+            sg.InputText(last_saved_location, key="csv-export"), 
             sg.FileBrowse(target="csv-export")
         ],
         #whitespace
@@ -55,6 +69,7 @@ while True:
             df = pd.read_csv(CSV_LOCATION,encoding='latin1' ,dtype='str' ,sep=';', header=0)
             df = cutoff_two_appointments(df)
             reasons = find_testgruende(df)
+            dict_reasons["last-csv-export-location"] = CSV_LOCATION
             break
         except FileNotFoundError:
             sg.Popup('Upsi!', 'Sicher, dass du den Export bereits ausgewählt hast?')
@@ -63,15 +78,6 @@ while True:
             sg.Popup(e)
     elif event == sg.WIN_CLOSED:
         exit()
-
-
-    
-# Testgruende laden
-try:
-    dict_reasons = load_reasons_dict()
-except Exception as e:
-    logger.error(e)
-    print(e)
 
 reasons_layout= []
 longest_reason = "bla"
