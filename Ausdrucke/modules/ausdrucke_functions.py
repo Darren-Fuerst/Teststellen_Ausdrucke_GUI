@@ -211,6 +211,10 @@ def generate_html(df, name, dict_reasons):
 
         html_text += replace_all(html_page_template, dict)
     
+    #wenn das Dataframe leer ist, dann sind hier keine Tests angemeldet
+    if len(df) == 0:
+        html_text +=""" <div style="border: 5px solid red; width: 50%;"><h1 style="text-align: center;"><strong><em>Heute wurden hier keine Tests angemeldet!</em></strong></h1></div>"""
+
     html_text += html_tail
     #open text file
     text_file = open("" + name + ".html", "w", encoding="utf-8")
