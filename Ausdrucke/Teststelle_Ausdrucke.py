@@ -65,6 +65,10 @@ while True:
     if event == "Weiter":
         try:
             CSV_LOCATION = values["csv-export"]
+
+            # clean the csv file
+            clean_export(CSV_LOCATION)
+
             # reading the CSV file
             df = pd.read_csv(CSV_LOCATION,encoding='latin1' ,dtype='str' ,sep=';', header=0)
             df = cutoff_two_appointments(df)
