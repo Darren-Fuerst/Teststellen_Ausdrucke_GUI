@@ -16,11 +16,17 @@ html_head = '''<!DOCTYPE html>
         .tg .tg-y698{background-color:#efefef;border-color:inherit;text-align:left;vertical-align:top}
         .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
 
+
+
         @media print {
           .hidden-print {
             box-shadow: none !important;
             border: none !important;
             break-inside: avoid !important;
+          }
+
+          .description-title{
+            visibility:hidden;
           }
         }
 

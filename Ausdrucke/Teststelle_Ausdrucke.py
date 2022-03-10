@@ -75,6 +75,10 @@ while True:
             sg.Popup('Upsi!', 'Sicher, dass du den Export bereits ausgewählt hast?')
         except Exception as e:
             logger.error(e)
+            #Bekannter Error mit Hilfsanweisungen.
+            if "Error tokenizing data. C error: " in str(e):
+                line = str(e)[-12:-9]
+                e = "Schau dir Zeile " + line + " im Export an.\n\nDazu kannst du Excel benutzen.\n\nHier scheint es zu viele Spalten zu geben!\n\nLösche nach der Spalte 'Testgrund' im Export alle vorhandenen Spalten in denen noch Text steht."
             sg.Popup(e)
     elif event == sg.WIN_CLOSED:
         exit()

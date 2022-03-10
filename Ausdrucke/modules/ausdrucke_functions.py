@@ -181,11 +181,15 @@ def generate_html(df, name, dict_reasons):
 
     df: dataframe to be converted to HTML
     name: name to be used in HTML filename
+    dict_reasons: dictionary of test reasons witht their paragraphs
     """
 
     dict={}
 
     html_text = html_head
+
+    # Die Dataframes werden davor gesplittet also muss die Ressource überall gleich sein deswegen nehmen wir einfach die Ressource bei Index 0
+    html_text += """<h1 class="description-title" style="text-align:center;" > """+ df.loc[0, 'Ressource'] +  """</h1> """
 
     for i in range(len(df)):
 
