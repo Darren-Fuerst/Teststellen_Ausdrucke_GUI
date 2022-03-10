@@ -3,7 +3,30 @@ import sys
 import os
 import pandas as pd
 import json
+import csv
 from modules.html_template import *
+
+def clean_export(path):
+    """
+    Cleans up the export so it is able to be read in by pandas.read_csv() 
+    Sometimes the export has more columns than it should have because the csv provider doesn't escape "special signs"
+
+    path: the Path to the csv to be cleaned
+    """
+    with open(path, "r", encoding="latin1") as file:
+        file = csv.reader(file, delimiter=";")
+        csv_list = []
+
+        #grab headers 
+        headers = next(file)
+
+        for row in file:
+            #cut off anything beyond the last header
+            csv_list.append(row[0:len(headers)])
+        with open(path, "w", encoding="latin1") as f:
+            write = csv.writer(f, delimiter=";")
+            write.writerow(headers)
+            write.writerows(csv_list)
 
 def create_needed_folders():
     folders = [r"./Altdorf", r"./Hersbruck", r"./Lauf",r"./Altdorf/Listen", r"./Hersbruck/Listen", r"./Lauf/Listen", r"./Logs", r"./Export"]
@@ -58,15 +81,12 @@ def define_testgrund(dict_reasons, testgrund):
 
 def remove_columns(df):
     """Remove all columns which aren't needed for the list"""
-    del df['Anmeldedatum']
-    del df['Ressource']
-    del df['GF_PLZ']
-    del df['GF_Ort']
-    del df['GF_Telefon']
-    del df['Standort']
-    del df['Testart']
-    del df['GF_Ausweisnummer']
-    del df["Termine_copy"]
+    needed_cols = ["Termine", "GF_Familienname"	,"GF_Vorname","GF_Geburtsdatum","GF_Strasse","GF_Hausnr","GF_PLZ", "GF_Ort", "GF_Email", "Testgrund"]
+
+    for column in df.columns:
+        if column not in needed_cols:
+            del df[column]
+            
     return df
 
 def add_last_two_cols(df):
