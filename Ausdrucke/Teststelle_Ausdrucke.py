@@ -34,7 +34,7 @@ reasons = []
 try:
     dict_reasons = load_reasons_dict()
 except Exception as e:
-    logger.error(e)
+    logger.error(e, exc_info=True)
     print(e)
 
 try:
@@ -78,7 +78,7 @@ while True:
         except FileNotFoundError:
             sg.Popup('Upsi!', 'Sicher, dass du den Export bereits ausgewählt hast?')
         except Exception as e:
-            logger.error(e)
+            logger.error(e, exc_info=True)
             #Bekannter Error mit Hilfsanweisungen.
             if "Error tokenizing data. C error: " in str(e):
                 line = str(e)[-12:-9]
@@ -155,7 +155,7 @@ while True:
         except ValueError:
             sg.Popup('Upsi!', 'Hast du vergessen die Start- und Endzeit einzugeben?')
         except Exception as e:
-            logger.error(e)
+            logger.error(e, exc_info=True)
             sg.Popup(e)
 
     elif event == sg.WIN_CLOSED:
@@ -165,8 +165,9 @@ while True:
 try:
     store_reasons_dict(dict_reasons)
 except Exception as e:
-    logger.error(e)
+    logger.error(e, exc_info=True)
     print(e)
+    sg.popup(e)
 
 
 # filtert und befüllt die 6 DataFrames
@@ -210,7 +211,8 @@ try:
     print_to_excel(df_lauf_pcr, "./Lauf/Listen/LAU_Liste_PCR")
 
 except Exception as e:
-    logger.error(e)
+    logger.error(e, exc_info=True)
+    sg.popup(e)
 
 duplicated_persons_layout = []
 duplicated_persons_layout.append([sg.Text("Personen:", size=(50, 1)), sg.Text("Häufigkeit:", size=(20, 1))])
@@ -273,7 +275,7 @@ while True:
             exit()
             break
         except Exception as e:
-            logger.error(e)
+            logger.error(e, exc_info=True)
             sg.Popup(e)
     elif event == "Altdorf":
         open_files("Altdorf")
