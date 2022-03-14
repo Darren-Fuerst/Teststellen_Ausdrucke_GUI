@@ -4,7 +4,52 @@ import os
 import pandas as pd
 import json
 import csv
+import re
+import openpyxl
+from openpyxl.styles import Font
+from openpyxl.styles import Border, Side
 from modules.html_template import *
+
+def __style_excel(df, name):
+    wb = openpyxl.load_workbook(name)
+    ws1 = wb.active
+
+    #Duplikate markieren mit first und last keyword zu Series.duplicated()
+    ws1 = __mark_duplicates(df, ws1, "first")
+    ws1 = __mark_duplicates(df, ws1, "last")
+    
+    #Unmögliche Emails markieren
+    ws1 = __mark_email(df["Email"], ws1)
+
+    #add border
+    thin = Side(border_style="thin", color="000000")
+    for cols in ws1.iter_cols(min_col=None, max_col=None, min_row=None, max_row=None):
+        for cell in cols:
+            cell.border = Border(top=thin, left=thin, right=thin, bottom=thin)
+
+    # print settings
+    ws1.print_options.horizontalCentered = True
+
+    wb.save(filename = name)
+
+def __mark_email(mail_series, worksheet):
+    for i in range(len(mail_series)):
+        if not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", mail_series.iloc[i]):
+            worksheet = __mark_cell(worksheet, i + 2, 10)
+    return worksheet
+
+def __mark_duplicates(df,worksheet, keep):
+    duplicates = (df['Vorname'] + df["Familienname"]).duplicated(keep=keep)
+    for i in range(1, len(duplicates) + 1):
+        if duplicates[i]:
+            worksheet = __mark_cell(worksheet, i+1, 1)
+    return worksheet
+
+def __mark_cell(worksheet, x, y):
+    worksheet.cell(row= x, column=y).font = Font(color="FF0400")
+    return worksheet
+
+
 
 def clean_export(path):
     """
@@ -151,6 +196,9 @@ def print_to_excel(df, name):
     df.index = list(range(1, len(df) + 1))
     with pd.ExcelWriter(r''+ name+'.xlsx') as writer:
         df.to_excel(writer)
+    
+    ## Styling wie Borders und duplicate markieren
+    __style_excel(df, name + ".xlsx")
     
 def define_ressource(ressource):
     if ressource == "Hersbruck Schnelltest" or ressource == "Hersbruck PCR-Test":
