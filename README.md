@@ -36,6 +36,8 @@ subprocess
 sys
 os
 pandas
+openpyxl
+re
 json
 csv
 ```
