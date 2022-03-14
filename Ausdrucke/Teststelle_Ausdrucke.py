@@ -174,14 +174,43 @@ except Exception as e:
 #tuple unpacking nötig
 try:
     (df_hersbruck, df_hersbruck_pcr, df_altdorf, df_altdorf_pcr, df_lauf, df_lauf_pcr) = split_df_teststellen(df)
+except Exception as e:
+    logger.error(e, exc_info=True)
+    sg.popup(e)
 
+#jedes File einzeln probieren, falls bei einer Teststelle ein Fehler auftaucht.
+try:
     generate_html(df_hersbruck, "./Hersbruck/HEB_Schnelltests", dict_reasons)
+except Exception as e:
+    logger.error(e, exc_info=True)
+    sg.popup(e)
+try:
     generate_html(df_hersbruck_pcr, "./Hersbruck/HEB_PCRs", dict_reasons)
+except Exception as e:
+    logger.error(e, exc_info=True)
+    sg.popup(e)
+try:
     generate_html(df_altdorf, "./Altdorf/ALD_Schnelltests", dict_reasons)
+except Exception as e:
+    logger.error(e, exc_info=True)
+    sg.popup(e)
+try:
     generate_html(df_altdorf_pcr, "./Altdorf/ALD_PCRs", dict_reasons)
+except Exception as e:
+    logger.error(e, exc_info=True)
+    sg.popup(e)
+try:
     generate_html(df_lauf, "./Lauf/LAU_Schnelltests", dict_reasons)
+except Exception as e:
+    logger.error(e, exc_info=True)
+    sg.popup(e)
+try:
     generate_html(df_lauf_pcr, "./Lauf/LAU_PCRs", dict_reasons)
+except Exception as e:
+    logger.error(e, exc_info=True)
+    sg.popup(e)
 
+try:
     df_hersbruck = remove_columns(df_hersbruck)
     df_hersbruck_pcr = remove_columns(df_hersbruck_pcr)
     df_altdorf = remove_columns(df_altdorf)
@@ -203,16 +232,43 @@ try:
     df_lauf = add_last_two_cols(df_lauf)
     df_lauf_pcr = add_last_two_cols(df_lauf_pcr)
 
-    print_to_excel(df_hersbruck, "./Hersbruck/Listen/HEB_Liste_Schnell")
-    print_to_excel(df_hersbruck_pcr, "./Hersbruck/Listen/HEB_Liste_PCR")
-    print_to_excel(df_altdorf, "./Altdorf/Listen/ALD_Liste_Schnell")
-    print_to_excel(df_altdorf_pcr, "./Altdorf/Listen/ALD_Liste_PCR")
-    print_to_excel(df_lauf, "./Lauf/Listen/LAU_Liste_Schnell")
-    print_to_excel(df_lauf_pcr, "./Lauf/Listen/LAU_Liste_PCR")
-
 except Exception as e:
     logger.error(e, exc_info=True)
     sg.popup(e)
+
+
+#jedes File einzeln probieren, falls bei einer Teststelle ein Fehler auftaucht.
+try:
+    print_to_excel(df_hersbruck, "./Hersbruck/Listen/HEB_Liste_Schnell")
+except Exception as e:
+    logger.error(e, exc_info=True)
+    sg.popup(e)
+try:
+    print_to_excel(df_hersbruck_pcr, "./Hersbruck/Listen/HEB_Liste_PCR")
+except Exception as e:
+    logger.error(e, exc_info=True)
+    sg.popup(e)
+try:
+    print_to_excel(df_altdorf, "./Altdorf/Listen/ALD_Liste_Schnell")
+except Exception as e:
+    logger.error(e, exc_info=True)
+    sg.popup(e)
+try:
+    print_to_excel(df_altdorf_pcr, "./Altdorf/Listen/ALD_Liste_PCR")
+except Exception as e:
+    logger.error(e, exc_info=True)
+    sg.popup(e)
+try:
+    print_to_excel(df_lauf, "./Lauf/Listen/LAU_Liste_Schnell")
+except Exception as e:
+    logger.error(e, exc_info=True)
+    sg.popup(e)
+try:
+    print_to_excel(df_lauf_pcr, "./Lauf/Listen/LAU_Liste_PCR")
+except Exception as e:
+    logger.error(e, exc_info=True)
+    sg.popup(e)
+
 
 duplicated_persons_layout = []
 duplicated_persons_layout.append([sg.Text("Personen:", size=(50, 1)), sg.Text("Häufigkeit:", size=(20, 1))])
