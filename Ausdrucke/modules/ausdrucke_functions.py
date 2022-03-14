@@ -27,9 +27,6 @@ def __style_excel(df, name):
         for cell in cols:
             cell.border = Border(top=thin, left=thin, right=thin, bottom=thin)
 
-    # print settings
-    ws1.print_options.horizontalCentered = True
-
     wb.save(filename = name)
 
 def __mark_email(mail_series, worksheet):
@@ -180,7 +177,9 @@ def replace_headers(df):
     "GF_Geburtsdatum":"Geburtsdatum",
     "GF_Strasse": "Strasse",
     "GF_Hausnr": "HN",
-    "GF_Email": "Email"
+    "GF_Email": "Email",
+    "GF_PLZ": "PLZ",
+    "GF_Ort": "Ort"
     }
 
     df.rename(columns=header_names, inplace=True)
