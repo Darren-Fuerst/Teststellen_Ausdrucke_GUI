@@ -14,6 +14,13 @@ def __style_excel(df, name):
     wb = openpyxl.load_workbook(name)
     ws1 = wb.active
 
+    #add border
+    # needs to be added first so we can change special values borders later on
+    thin = Side(border_style="thin", color="000000")
+    for cols in ws1.iter_cols(min_col=None, max_col=None, min_row=None, max_row=None):
+        for cell in cols:
+            cell.border = Border(top=thin, left=thin, right=thin, bottom=thin)
+    
     #Duplikate markieren mit first und last keyword zu Series.duplicated()
     ws1 = __mark_duplicates(df, ws1, "first")
     ws1 = __mark_duplicates(df, ws1, "last")
@@ -21,17 +28,17 @@ def __style_excel(df, name):
     #Unmögliche Emails markieren
     ws1 = __mark_email(df["Email"], ws1)
 
-    #add border
-    thin = Side(border_style="thin", color="000000")
-    for cols in ws1.iter_cols(min_col=None, max_col=None, min_row=None, max_row=None):
-        for cell in cols:
-            cell.border = Border(top=thin, left=thin, right=thin, bottom=thin)
+    
 
     wb.save(filename = name)
+
 
 def __mark_email(mail_series, worksheet):
     for i in range(len(mail_series)):
         if not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", mail_series.iloc[i]):
+            # i + 2 because excel is index from 1 and it also has headers so when Indexing from 0 like in the Dataframe
+            # it is actually 2 indices above in the excel sheet
+            # Column 10 is the mail column
             worksheet = __mark_cell(worksheet, i + 2, 10)
     return worksheet
 
@@ -43,7 +50,9 @@ def __mark_duplicates(df,worksheet, keep):
     return worksheet
 
 def __mark_cell(worksheet, x, y):
+    thick = Side(border_style="thick", color="000000")
     worksheet.cell(row= x, column=y).font = Font(color="FF0400")
+    worksheet.cell(row= x, column=y).border = Border(top=thick, left=thick, right=thick, bottom=thick)
     return worksheet
 
 
