@@ -141,7 +141,7 @@ window.close()
 window = sg.Window('Teststellen Ausdrucke', size=window_size).Layout(layout2)
 
 # Popup with todays csv Date
-sg.Popup("Datum des Exports: " + date_of_csv)
+sg.Popup("Datum des ausgewählten Exports: " + date_of_csv)
 
 while True:
     event, values = window.Read() # Run the window until an "event" is triggered
