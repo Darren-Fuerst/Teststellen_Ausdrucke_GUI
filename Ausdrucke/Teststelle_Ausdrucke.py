@@ -1,3 +1,4 @@
+from datetime import date
 import PySimpleGUI as sg
 from modules.ausdrucke_functions import *
 import logging
@@ -58,6 +59,7 @@ layout1 = [
         ]
     ]
 
+date_of_csv = ""
     
 window = sg.Window('Teststellen Ausdrucke', size=window_size).Layout(layout1)
 while True:
@@ -74,12 +76,15 @@ while True:
             df = cutoff_two_appointments(df)
             reasons = find_testgruende(df)
             dict_reasons["last-csv-export-location"] = CSV_LOCATION
+
+            # grab date of todays csv
+            date_of_csv = str(df.Termine[0])[:11]
             break
         except FileNotFoundError:
             sg.Popup('Upsi!', 'Sicher, dass du den Export bereits ausgewählt hast?')
         except Exception as e:
             logger.error(e, exc_info=True)
-            #Bekannter Error mit Hilfsanweisungen.
+            #Bekannter Error, bei zu vielen Spalten im Export mit Hilfsanweisungen.
             if "Error tokenizing data. C error: " in str(e):
                 line = str(e)[-12:-9]
                 e = "Schau dir Zeile " + line + " im Export an.\n\nDazu kannst du Excel benutzen.\n\nHier scheint es zu viele Spalten zu geben!\n\nLösche nach der Spalte 'Testgrund' im Export alle vorhandenen Spalten in denen noch Text steht."
@@ -89,11 +94,9 @@ while True:
 
 reasons_layout= []
 longest_reason = "bla"
-prev = ""
 for i in reasons.index:
-    if len(i) > len(prev):
+    if len(i) > len(longest_reason):
         longest_reason = i
-        prev = longest_reason
 
 for i in list(reasons.index):
     try:
@@ -136,6 +139,10 @@ layout2 = [
 duplicated_persons = []
 window.close()
 window = sg.Window('Teststellen Ausdrucke', size=window_size).Layout(layout2)
+
+# Popup with todays csv Date
+sg.Popup("Datum des Exports: " + date_of_csv)
+
 while True:
     event, values = window.Read() # Run the window until an "event" is triggered
     if event == "Weiter":
