@@ -75,7 +75,7 @@ def clean_export(path):
             #cut off anything beyond the last header
             csv_list.append(row[0:len(headers)])
         with open(path, "w", encoding="latin1") as f:
-            write = csv.writer(f, delimiter=";")
+            write = csv.writer(f, delimiter=";", lineterminator="\n")
             write.writerow(headers)
             write.writerows(csv_list)
 
