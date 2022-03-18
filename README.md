@@ -28,6 +28,15 @@
  
  -----------------------------------------------------------------------------------------------
  
+ Header CSV:
+ 
+ ```
+ Anmeldedatum;Termine;Ressource;GF_Familienname;GF_Vorname;GF_Geburtsdatum;GF_Strasse;GF_Hausnr;GF_PLZ;GF_Ort;GF_Telefon;GF_Email;Standort;Testart;GF_Ausweisnummer;Testgrund 
+ ```
+ 
+ 
+ -----------------------------------------------------------------------------------------------
+ 
 ### Benutzte Python-Module:
 ```
 pysimplegui
