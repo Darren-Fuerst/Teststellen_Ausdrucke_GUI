@@ -58,8 +58,6 @@ layout1 = [
             sg.Button("Weiter", size=(15,2))
         ]
     ]
-
-date_of_csv = ""
     
 window = sg.Window('Teststellen Ausdrucke', size=window_size).Layout(layout1)
 while True:
@@ -79,6 +77,9 @@ while True:
 
             # grab date of todays csv
             date_of_csv = str(df.Termine[0])[:11]
+
+            # Popup with todays csv Date
+            sg.Popup("Datum des Exports: " + date_of_csv)   
             break
         except FileNotFoundError:
             sg.Popup('Upsi!', 'Sicher, dass du den Export bereits ausgewählt hast?')
@@ -107,6 +108,7 @@ for i in list(reasons.index):
 
 if len(reasons_layout) == 0:
     reasons_layout.append([sg.Text("Heute wurden keine Testgründe im Girona-Export entdeckt!")])
+
 
 
 layout2 = [
@@ -139,9 +141,6 @@ layout2 = [
 duplicated_persons = []
 window.close()
 window = sg.Window('Teststellen Ausdrucke', size=window_size).Layout(layout2)
-
-# Popup with todays csv Date
-sg.Popup("Datum des ausgewählten Exports: " + date_of_csv)
 
 while True:
     event, values = window.Read() # Run the window until an "event" is triggered
