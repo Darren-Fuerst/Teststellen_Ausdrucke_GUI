@@ -66,6 +66,10 @@ layout_all_reasons = [
     [sg.Text("Hier kannst du alle Testgründe auf einen Schlag ändern:")],
 
      #whitespace
+    [sg.Text("", size=(50,2))],
+    [sg.Text("Um einen Grund zu löschen schreibe 'löschen' in das Feld:")],
+
+     #whitespace
     [sg.Text("", size=(50,5))]
 ]  
 longest_reason = "bla"
