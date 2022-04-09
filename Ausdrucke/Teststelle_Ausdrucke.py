@@ -1,4 +1,6 @@
 from datetime import date
+
+from numpy import size
 import PySimpleGUI as sg
 from modules.ausdrucke_functions import *
 import logging
@@ -55,11 +57,44 @@ layout1 = [
         [sg.Text("", size=(50,5))],
 
           [ # ---- New row
+            sg.Button("Alle Testgründe anzeigen", size=(30,2)),
             sg.Button("Weiter", size=(15,2))
         ]
     ]
-    
+
+layout_all_reasons = [
+    [sg.Text("Hier kannst du alle Testgründe auf einen Schlag ändern:")],
+
+     #whitespace
+    [sg.Text("", size=(50,5))]
+]  
+longest_reason = "bla"
+for i in dict_reasons:
+    if len(i) > len(longest_reason):
+        longest_reason = i
+
+for i in dict_reasons:
+    try:
+        reason = dict_reasons[i]
+
+        if i == "last-csv-export-location":
+            continue
+    except KeyError:
+        reason = ""
+    layout_all_reasons.append([sg.Text(i, size=(len(longest_reason), 1)), sg.InputText(reason, size=(15,1), key=i) ])
+
+layout_all_reasons = layout_all_reasons + [
+     #whitespace
+    [sg.Text("", size=(50,5))],
+
+    [sg.Button("Testgründe übernehmen", size=(20,2))]
+]
+
 window = sg.Window('Teststellen Ausdrucke', size=window_size).Layout(layout1)
+
+#if not instantiated the window is just an empty string
+#this will be used to check if the window has been created already and is hidden or not
+n_window = ""
 while True:
     event, values = window.Read() # Run the window until an "event" is triggered
     if event == "Weiter":
@@ -90,8 +125,37 @@ while True:
                 line = str(e)[-12:-9]
                 e = "Schau dir Zeile " + line + " im Export an.\n\nDazu kannst du Excel benutzen.\n\nHier scheint es zu viele Spalten zu geben!\n\nLösche nach der Spalte 'Testgrund' im Export alle vorhandenen Spalten in denen noch Text steht."
             sg.Popup(e)
+    elif event == "Alle Testgründe anzeigen":
+        if n_window == "":
+            n_window = sg.Window('Teststellen Ausdrucke', size=window_size).Layout(layout_all_reasons)
+        else:
+            n_window.UnHide()
+        while True:
+            event, values = n_window.Read() # Run the window until an "event" is triggered
+            if event == "Testgründe übernehmen":
+                for i in dict_reasons:
+                    try:
+                        if i != "last-csv-export-location":
+                            dict_reasons[i] = values[i] 
+                    except Exception as e:
+                        logger.error(e, exc_info=True)
+                        print(e)
+                        sg.Popup(e)
+                #list of keys to delete as we cant change the dictionary during iteration
+                to_delete = []
+                for i in dict_reasons:
+                    if dict_reasons[i] == "löschen":
+                        to_delete.append(i)
+                for reason in to_delete:
+                    del dict_reasons[reason]
+                n_window.hide()
+                break
+            elif event == sg.WIN_CLOSED:
+                exit()
     elif event == sg.WIN_CLOSED:
         exit()
+
+
 
 reasons_layout= []
 longest_reason = "bla"
@@ -139,6 +203,9 @@ layout2 = [
 #globally accessible
 (df_hersbruck, df_hersbruck_pcr, df_altdorf, df_altdorf_pcr, df_lauf, df_lauf_pcr) = (0,0,0,0,0,0)
 duplicated_persons = []
+
+if n_window != "":  # if n_window exists
+    n_window.close()
 window.close()
 window = sg.Window('Teststellen Ausdrucke', size=window_size).Layout(layout2)
 
