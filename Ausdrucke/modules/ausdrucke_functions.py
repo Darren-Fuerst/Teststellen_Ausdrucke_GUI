@@ -315,5 +315,12 @@ def duplicates_of_persons(df):
     return counted_persons
 
 def find_testgruende(df):
+    """
+    Finds all test reasons inside the dataframe 
+
+    There are two relevant columns for this we combine them to a single column
+    """
+    # merge all reasons in the original column
+    df['Testgrund']=df['Testgrund'].mask(pd.isnull, df["Testgrund_Schnelltest"])
     reasons = df["Testgrund"].value_counts()
     return reasons

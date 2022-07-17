@@ -5,3 +5,5 @@ Hersbruck/
 Lauf/
 Export/
 close
+*.log
+*.json
