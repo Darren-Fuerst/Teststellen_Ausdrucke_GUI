@@ -89,7 +89,6 @@ for i in dict_pcr_reasons:
         reason = ""
     layout_all_reasons.append([sg.Text("PCR: " + i, size=(len(longest_reason), 1)), sg.InputText(reason, size=(15,1), key="pcr"+i) ])
 
-print(dict_schnell_reasons)
 
 for i in dict_schnell_reasons:
     try:
@@ -206,7 +205,6 @@ for i in list(pcr_reasons.index):
     reasons_layout.append([sg.Text("PCR: " + i, size=(len(longest_reason), 1)), sg.InputText(reason, size=(15,1), key="pcr"+i) ])
 
 for i in list(schnell_reasons.index):
-    print(i)
     try:
         r = dict_schnell_reasons[i]
     except KeyError:
@@ -217,7 +215,6 @@ if len(reasons_layout) == 0:
     reasons_layout.append([sg.Text("Heute wurden keine Testgründe im Girona-Export entdeckt!")])
 
 
-print(dict_schnell_reasons)
 
 
 layout2 = [
@@ -439,8 +436,6 @@ layout3 = [
             sg.Button("Beenden", size=(15,2))
     ]
 ]
-
-print(len(df_hersbruck))
 
 window.close()
 window = sg.Window('Teststellen Ausdrucke',size=window_size).Layout(layout3)

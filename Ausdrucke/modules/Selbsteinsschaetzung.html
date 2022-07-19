@@ -7,32 +7,41 @@
     <title>Document</title>
 </head>
 <body style="word-wrap: break-word; margin-bottom: 20px; margin-left: auto; margin-right: auto; width: 700px; padding-bottom: 15px; border :1px solid black;  box-shadow: 10px 10px 8px #888888;">
-    <div style="margin:1em;">
+    <div style="margin:1em; font-size: small; page-break-after: always;width: 683px;">
     <div>
-        <h3>Selbstauskunft/Nachweis nach § 6 Abs. 3 Nr. 4 und 5 TestV zur Inanspruchnahme von Testungen nach § 4a TestV</h1>
-
+      <table >
+        <tr>
+          <td>
+        <h3 style="display: inline;">Selbstauskunft/Nachweis nach § 6 Abs. 3 Nr. 4 und 5 TestV zur Inanspruchnahme von Testungen nach § 4a TestV</h3>
+       </td>
+       <td>
+        <h1>{{Testnummer}}</h1>
+       </td>
+        </tr>
+      </table>
+       
         <div>
            <p>
-            Nachweis der Identität
-           </p> 
+            Nachweis der Identität: 
+           
 
-            <input type="checkbox" name="" id=""><label for="">Personalausweis</label>
-            <br>
-            <input type="checkbox" name="" id=""><label for="">Reisepass</label>
-            <br>
-            <input type="text" name="" id="">
+            <input style="margin-left: 0.5em;" type="checkbox" name="" id=""><label style="margin-left: 0.5em;"  for="">Personalausweis</label>
+            
+            <input style="margin-left: 0.5em;"  type="checkbox" name="" id=""><label style="margin-left: 0.5em;"  for="">Reisepass Ausweisnummer: </label>
+            
+            <input style="margin-left: 0.5em;" size="25em;" type="text" name="" id="">
+          </p> 
         </div>
 
-        <p>Hiermit versichere ich,</p>
-        <input type="text">
-        <br>
+        <p>Hiermit versichere ich,
+        <input size="35em;" type="text" value="{{GF_Vorname}} {{GF_Familienname}}">
+      </p>
         <span>geboren am</span>
-        <input type="text">
+        <input type="text" size="12em;" value="{{GF_Geburtsdatum}}">
         <span>in</span>
         <input type="text" name="" id="">
-        <br>
-        wohnhaft in 
-        <input type="text">
+         wohnhaft in 
+        <input type="text" value="{{GF_PLZ}} {{GF_Ort}}">
     </div>
 
     <div>
@@ -42,11 +51,11 @@
 
             <style type="text/css">
                 .tg  {border-collapse:collapse;border-spacing:0;}
-                .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+                .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;;
                   overflow:hidden;padding:10px 5px;word-break:normal;}
-                .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+                .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;;
                   font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-                .tg .tg-1lax{text-align:left;vertical-align:top}
+                .tg .tg-1lax{text-align:left;vertical-align:top; font-size: smaller;}
                 </style>
                 <table class="tg">
                 <thead>
@@ -97,16 +106,17 @@
 
                 <style type="text/css">
                     .tg  {border-collapse:collapse;border-spacing:0;}
-                    .tg td{font-family:Arial, sans-serif;font-size:14px;
+                    .tg td{font-family:Arial, sans-serif;;
                       overflow:hidden;padding:10px 5px;word-break:normal;}
-                    .tg th{font-family:Arial, sans-serif;font-size:14px;
+                    .tg th{font-family:Arial, sans-serif;
                       font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-                    .tg .tg-0lax{text-align:left;vertical-align:top; border:none;}
+                    .tg .tg-0lax{text-align:left;vertical-align:top; border:none; font-size: smaller;}
                     </style>
                     <table class="tg" style="border: none; margin-top: 1em;">
                     <thead>
                       <tr>
-                        <td class="tg-0lax">____________________<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ort, Datum</td>
+                        <td class="tg-0lax"><u>Hersbruck, <script> document.write(new Date().toLocaleDateString('de-DE')); </script>
+                        </u><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ort, Datum</td>
                         <td class="tg-0lax" style="padding-left: 15em;"></td>
                         <td class="tg-0lax">___________________________<br>Unterschrift der Testperson bzw.<br>des Erziehungsberechtigten<br></td>
                       </tr>
@@ -125,7 +135,7 @@
               overflow:hidden;padding:10px 5px;word-break:normal;}
             .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
               font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-            .tg .tg-2lax{text-align:left;vertical-align:top}
+            .tg .tg-2lax{text-align:left;vertical-align:top; font-size: smaller;}
             </style>
             <table class="tg">
             <thead>
@@ -157,7 +167,7 @@
         <table class="tg" style="border: none; margin-top: 1em;">
             <thead>
               <tr>
-                <td class="tg-0lax">____________________<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbspOrt, Datum</td>
+                <td class="tg-0lax"><u>Hersbruck,<script> document.write(new Date().toLocaleDateString('de-DE')); </script> </u><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbspOrt, Datum</td>
                 <td class="tg-0lax" style="padding-left: 15em;"></td>
                 <td class="tg-0lax">___________________________<br>Unterschrift der/des Testenden</td>
               </tr>
@@ -170,8 +180,8 @@
 
     </div>
 
-    <span>*Angaben durch entsprechende Dokumente zu belegen (z.B. amtlicher Lichtbildausweis, ärztliches Attest, Mutterpass, positiver Test, Eintrittskarte, Corona-Warn-App, Testergebnis und Nachweis des Wohnortes).</span>
-    <span>**Testungen mit Eigenbeteiligung sind nicht in lokalen Testzentren der Kreisverwaltungsbehörden möglich!</span>
+    <span style="font-size: 0.2em;">*Angaben durch entsprechende Dokumente zu belegen (z.B. amtlicher Lichtbildausweis, ärztliches Attest, Mutterpass, positiver Test, Eintrittskarte, Corona-Warn-App, Testergebnis und Nachweis des Wohnortes).</span>
+    <span style="font-size: 0.2em;">**Testungen mit Eigenbeteiligung sind nicht in lokalen Testzentren der Kreisverwaltungsbehörden möglich!</span>
     </div>
 </body>
 </html>

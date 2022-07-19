@@ -273,7 +273,6 @@ def generate_html(df, name, dict_reasons, pcr=True):
     else:
         spalte = "Testgrund_Schnelltest"
 
-    print(name, df[spalte])
 
     if len(df) > 0:
         # Die Dataframes werden davor gesplittet also muss die Ressource überall gleich sein deswegen nehmen wir einfach die Ressource bei Index 0
@@ -301,7 +300,12 @@ def generate_html(df, name, dict_reasons, pcr=True):
         else:
             dict['{{ID}}'] = ''
 
-        html_text += replace_all(html_page_template, dict)
+        if pcr:
+            html_for_person = html_page_template
+        else:
+            html_for_person = html_page_template + html_selbstauskunft
+
+        html_text += replace_all(html_for_person, dict)
     
     #wenn das Dataframe leer ist, dann sind hier keine Tests angemeldet
     if len(df) == 0:
