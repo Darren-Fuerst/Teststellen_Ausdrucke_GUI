@@ -356,32 +356,32 @@ except Exception as e:
 
 #jedes File einzeln probieren, falls bei einer Teststelle ein Fehler auftaucht.
 try:
-    print_to_excel(df_hersbruck, "./Hersbruck/Listen/HEB_Liste_Schnell")
+    print_to_excel(df_hersbruck, "./Hersbruck/Listen/HEB_Liste_Schnell", False)
 except Exception as e:
     logger.error(e, exc_info=True)
     sg.popup(e)
 try:
-    print_to_excel(df_hersbruck_pcr, "./Hersbruck/Listen/HEB_Liste_PCR")
+    print_to_excel(df_hersbruck_pcr, "./Hersbruck/Listen/HEB_Liste_PCR", True)
 except Exception as e:
     logger.error(e, exc_info=True)
     sg.popup(e)
 try:
-    print_to_excel(df_altdorf, "./Altdorf/Listen/ALD_Liste_Schnell")
+    print_to_excel(df_altdorf, "./Altdorf/Listen/ALD_Liste_Schnell", False)
 except Exception as e:
     logger.error(e, exc_info=True)
     sg.popup(e)
 try:
-    print_to_excel(df_altdorf_pcr, "./Altdorf/Listen/ALD_Liste_PCR")
+    print_to_excel(df_altdorf_pcr, "./Altdorf/Listen/ALD_Liste_PCR", True)
 except Exception as e:
     logger.error(e, exc_info=True)
     sg.popup(e)
 try:
-    print_to_excel(df_lauf, "./Lauf/Listen/LAU_Liste_Schnell")
+    print_to_excel(df_lauf, "./Lauf/Listen/LAU_Liste_Schnell", False)
 except Exception as e:
     logger.error(e, exc_info=True)
     sg.popup(e)
 try:
-    print_to_excel(df_lauf_pcr, "./Lauf/Listen/LAU_Liste_PCR")
+    print_to_excel(df_lauf_pcr, "./Lauf/Listen/LAU_Liste_PCR", True)
 except Exception as e:
     logger.error(e, exc_info=True)
     sg.popup(e)

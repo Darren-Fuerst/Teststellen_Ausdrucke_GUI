@@ -199,13 +199,18 @@ def replace_headers(df):
     df.rename(columns=header_names, inplace=True)
     return df
 
-def print_to_excel(df, name):
+def print_to_excel(df, name, pcr):
     """
     prints df to excel with appropriate name
 
     df: dataframe to be printed
     name: name to be used in file name
     """
+    if pcr:
+        del df["Testgrund_Schnelltest"]
+    else:
+        del df["Testgrund"]
+        
     df.index = list(range(1, len(df) + 1))
     with pd.ExcelWriter(r''+ name+'.xlsx') as writer:
         df.to_excel(writer)
