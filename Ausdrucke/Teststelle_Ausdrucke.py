@@ -224,8 +224,8 @@ layout2 = [
         ],
         [   
             
-            sg.Text("Startzeit", size=(12, 1)), sg.InputText(key="Startzeit", size=(5,1)),
-            sg.Text("Endzeit", size=(12, 1)), sg.InputText(key="Endzeit",size=(5,1))
+            sg.Text("Startzeit", size=(12, 1)), sg.InputText("1700", key="Startzeit", size=(5,1)),
+            sg.Text("Endzeit", size=(12, 1)), sg.InputText("1830",key="Endzeit",size=(5,1))
         ],
         #whitespace
         [sg.Text("", size=(50,5))],
