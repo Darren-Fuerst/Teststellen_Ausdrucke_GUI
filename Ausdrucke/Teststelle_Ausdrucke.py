@@ -28,20 +28,19 @@ create_needed_folders()
 #globally accessable across all windows
 df = pd.DataFrame()
 
-# aufzählen der Tesgründe
-reasons = []
-
+dict_schnell_reasons = {}
+dict_pcr_reasons = {}
 
     
 # Testgruende laden
 try:
-    dict_reasons = load_reasons_dict()
+   dict_schnell_reasons , dict_pcr_reasons = load_reasons_dict()
 except Exception as e:
     logger.error(e, exc_info=True)
     print(e)
 
 try:
-    last_saved_location = dict_reasons["last-csv-export-location"]
+    last_saved_location = dict_pcr_reasons["last-csv-export-location"]
 except:
     last_saved_location = ""
 
@@ -73,19 +72,32 @@ layout_all_reasons = [
     [sg.Text("", size=(50,5))]
 ]  
 longest_reason = "bla"
-for i in dict_reasons:
+for i in dict_pcr_reasons:
+    if len(i) > len(longest_reason):
+        longest_reason = i
+for i in dict_schnell_reasons:
     if len(i) > len(longest_reason):
         longest_reason = i
 
-for i in dict_reasons:
+for i in dict_pcr_reasons:
     try:
-        reason = dict_reasons[i]
+        reason = dict_pcr_reasons[i]
 
         if i == "last-csv-export-location":
             continue
     except KeyError:
         reason = ""
-    layout_all_reasons.append([sg.Text(i, size=(len(longest_reason), 1)), sg.InputText(reason, size=(15,1), key=i) ])
+    layout_all_reasons.append([sg.Text("PCR: " + i, size=(len(longest_reason), 1)), sg.InputText(reason, size=(15,1), key="pcr"+i) ])
+
+print(dict_schnell_reasons)
+
+for i in dict_schnell_reasons:
+    try:
+        r = dict_schnell_reasons[i]
+    except KeyError:
+        r = ""
+    layout_all_reasons.append([sg.Text("Schnell: " + i, size=(len(longest_reason), 1)), sg.InputText(r, size=(15,1), key="s" + i) ])
+
 
 layout_all_reasons = layout_all_reasons + [
      #whitespace
@@ -111,8 +123,8 @@ while True:
             # reading the CSV file
             df = pd.read_csv(CSV_LOCATION,encoding='latin1' ,dtype='str' ,sep=';', header=0)
             df = cutoff_two_appointments(df)
-            reasons = find_testgruende(df)
-            dict_reasons["last-csv-export-location"] = CSV_LOCATION
+            schnell_reasons, pcr_reasons = find_testgruende(df)
+            dict_pcr_reasons["last-csv-export-location"] = CSV_LOCATION
 
             # grab date of todays csv
             date_of_csv = str(df.Termine[0])[:11]
@@ -137,21 +149,36 @@ while True:
         while True:
             event, values = n_window.Read() # Run the window until an "event" is triggered
             if event == "Testgründe übernehmen":
-                for i in dict_reasons:
+                for i in dict_pcr_reasons:
                     try:
                         if i != "last-csv-export-location":
-                            dict_reasons[i] = values[i] 
+                            dict_pcr_reasons[i] = values["pcr"+i] 
                     except Exception as e:
                         logger.error(e, exc_info=True)
                         print(e)
                         sg.Popup(e)
                 #list of keys to delete as we cant change the dictionary during iteration
                 to_delete = []
-                for i in dict_reasons:
-                    if dict_reasons[i] == "löschen":
+                for i in dict_pcr_reasons:
+                    if dict_pcr_reasons[i] == "löschen":
                         to_delete.append(i)
                 for reason in to_delete:
-                    del dict_reasons[reason]
+                    del dict_pcr_reasons[reason]
+
+                for i in dict_schnell_reasons:
+                    try:
+                        dict_schnell_reasons[i] = values["s"+i] 
+                    except Exception as e:
+                        logger.error(e, exc_info=True)
+                        print(e)
+                        sg.Popup(e)
+                #list of keys to delete as we cant change the dictionary during iteration
+                to_delete = []
+                for i in dict_schnell_reasons:
+                    if dict_schnell_reasons[i] == "löschen":
+                        to_delete.append(i)
+                for reason in to_delete:
+                    del dict_schnell_reasons[reason]
                 n_window.hide()
                 break
             elif event == sg.WIN_CLOSED:
@@ -163,20 +190,34 @@ while True:
 
 reasons_layout= []
 longest_reason = "bla"
-for i in reasons.index:
+for i in schnell_reasons.index:
     if len(i) > len(longest_reason):
         longest_reason = i
 
-for i in list(reasons.index):
+for i in pcr_reasons.index:
+    if len(i) > len(longest_reason):
+        longest_reason = i
+
+for i in list(pcr_reasons.index):
     try:
-        reason = dict_reasons[i]
+        reason = dict_pcr_reasons[i]
     except KeyError:
         reason = ""
-    reasons_layout.append([sg.Text(i, size=(len(longest_reason), 1)), sg.InputText(reason, size=(15,1), key=i) ])
+    reasons_layout.append([sg.Text("PCR: " + i, size=(len(longest_reason), 1)), sg.InputText(reason, size=(15,1), key="pcr"+i) ])
+
+for i in list(schnell_reasons.index):
+    print(i)
+    try:
+        r = dict_schnell_reasons[i]
+    except KeyError:
+        r = ""
+    reasons_layout.append([sg.Text("Schnell: " + i, size=(len(longest_reason), 1)), sg.InputText(r, size=(15,1), key="s"+i) ])
 
 if len(reasons_layout) == 0:
     reasons_layout.append([sg.Text("Heute wurden keine Testgründe im Girona-Export entdeckt!")])
 
+
+print(dict_schnell_reasons)
 
 
 layout2 = [
@@ -224,8 +265,10 @@ while True:
             df = sort_df_ascending(df)
             df = filter_df_by_time(df, starttime=startzeit, endtime=endzeit)
             duplicated_persons = duplicates_of_persons(df)
-            for i in reasons.index:
-                dict_reasons[i] = values[i] 
+            for i in pcr_reasons.index:
+                dict_pcr_reasons[i] = values["pcr"+i]
+            for i in schnell_reasons.index:
+                dict_schnell_reasons[i] = values["s"+i] 
             break
         except TypeError:
             sg.Popup('Upsi!', 'Hast du sicher die Uhrzeit in Militärformat angegeben?')
@@ -240,7 +283,7 @@ while True:
 
 #store testgruende
 try:
-    store_reasons_dict(dict_reasons)
+    store_reasons_dict(dict_pcr_reasons, dict_schnell_reasons)
 except Exception as e:
     logger.error(e, exc_info=True)
     print(e)
@@ -257,32 +300,32 @@ except Exception as e:
 
 #jedes File einzeln probieren, falls bei einer Teststelle ein Fehler auftaucht.
 try:
-    generate_html(df_hersbruck, "./Hersbruck/HEB_Schnelltests", dict_reasons)
+    generate_html(df_hersbruck, "./Hersbruck/HEB_Schnelltests", dict_schnell_reasons, pcr=False)
 except Exception as e:
     logger.error(e, exc_info=True)
     sg.popup(e)
 try:
-    generate_html(df_hersbruck_pcr, "./Hersbruck/HEB_PCRs", dict_reasons)
+    generate_html(df_hersbruck_pcr, "./Hersbruck/HEB_PCRs", dict_pcr_reasons)
 except Exception as e:
     logger.error(e, exc_info=True)
     sg.popup(e)
 try:
-    generate_html(df_altdorf, "./Altdorf/ALD_Schnelltests", dict_reasons)
+    generate_html(df_altdorf, "./Altdorf/ALD_Schnelltests", dict_schnell_reasons, pcr=False)
 except Exception as e:
     logger.error(e, exc_info=True)
     sg.popup(e)
 try:
-    generate_html(df_altdorf_pcr, "./Altdorf/ALD_PCRs", dict_reasons)
+    generate_html(df_altdorf_pcr, "./Altdorf/ALD_PCRs", dict_pcr_reasons)
 except Exception as e:
     logger.error(e, exc_info=True)
     sg.popup(e)
 try:
-    generate_html(df_lauf, "./Lauf/LAU_Schnelltests", dict_reasons)
+    generate_html(df_lauf, "./Lauf/LAU_Schnelltests", dict_schnell_reasons, pcr=False)
 except Exception as e:
     logger.error(e, exc_info=True)
     sg.popup(e)
 try:
-    generate_html(df_lauf_pcr, "./Lauf/LAU_PCRs", dict_reasons)
+    generate_html(df_lauf_pcr, "./Lauf/LAU_PCRs", dict_pcr_reasons)
 except Exception as e:
     logger.error(e, exc_info=True)
     sg.popup(e)

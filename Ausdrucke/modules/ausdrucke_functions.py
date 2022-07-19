@@ -1,6 +1,7 @@
 import subprocess
 import sys
 import os
+from typing import Tuple
 import pandas as pd
 import json
 import csv
@@ -98,14 +99,18 @@ def open_files(Teststelle):
         else:
             os.system("start " + file)
 
-def store_reasons_dict(reasons_dict):
+def store_reasons_dict(reasons_pcr_dict, reasons_schnell_dict):
     with open('./modules/testgruende.json', 'w') as f:
-        json.dump(reasons_dict, f)
+        json.dump(reasons_pcr_dict, f)
+    with open('./modules/testgruende_schnell.json', 'w') as d:
+        json.dump(reasons_schnell_dict, d)
 
 def load_reasons_dict():
     with open('./modules/testgruende.json') as f:
-        reasons_dict = json.load(f)
-        return reasons_dict
+        reasons_pcr_dict = json.load(f)
+    with open('./modules/testgruende_schnell.json') as d:
+        reasons_schnell_dict = json.load(d)
+    return reasons_schnell_dict, reasons_pcr_dict
     
 def replace_all(html_text, dic):
     """
@@ -132,7 +137,7 @@ def define_testgrund(dict_reasons, testgrund):
 
 def remove_columns(df):
     """Remove all columns which aren't needed for the list"""
-    needed_cols = ["Termine", "GF_Familienname"	,"GF_Vorname","GF_Geburtsdatum","GF_Strasse","GF_Hausnr","GF_PLZ", "GF_Ort", "GF_Email", "Testgrund"]
+    needed_cols = ["Termine", "GF_Familienname"	,"GF_Vorname","GF_Geburtsdatum","GF_Strasse","GF_Hausnr","GF_PLZ", "GF_Ort", "GF_Email", "Testgrund", "Testgrund_Schnelltest"]
 
     for column in df.columns:
         if column not in needed_cols:
@@ -251,7 +256,7 @@ def split_df_teststellen(df):
 
     return (df_hersbruck, df_hersbruck_pcr, df_altdorf, df_altdorf_pcr, df_lauf, df_lauf_pcr)
 
-def generate_html(df, name, dict_reasons):
+def generate_html(df, name, dict_reasons, pcr=True):
     """
     Generates the HTML-File for a Girona csv Dataframe 
 
@@ -259,10 +264,16 @@ def generate_html(df, name, dict_reasons):
     name: name to be used in HTML filename
     dict_reasons: dictionary of test reasons witht their paragraphs
     """
-
     dict={}
 
     html_text = html_head
+
+    if pcr:
+        spalte = "Testgrund"
+    else:
+        spalte = "Testgrund_Schnelltest"
+
+    print(name, df[spalte])
 
     if len(df) > 0:
         # Die Dataframes werden davor gesplittet also muss die Ressource überall gleich sein deswegen nehmen wir einfach die Ressource bei Index 0
@@ -282,7 +293,7 @@ def generate_html(df, name, dict_reasons):
         dict['{{GF_Email}}'] = df.loc[i, 'GF_Email']
         dict['{{Testart}}'] = df.loc[i, 'Testart']
         dict['{{Ressource}}'] = define_ressource(df.loc[i, 'Ressource'])
-        dict['{{Grund}}'] = define_testgrund(dict_reasons ,df.loc[i, 'Testgrund'])
+        dict['{{Grund}}'] = define_testgrund(dict_reasons ,df.loc[i, spalte])
         dict['{{Testnummer}}'] = i + 1
 
         if dict['{{Testart}}'] == "Schnelltest":
@@ -318,9 +329,8 @@ def find_testgruende(df):
     """
     Finds all test reasons inside the dataframe 
 
-    There are two relevant columns for this we combine them to a single column
+    There are two relevant columns for this one for pcr and one for lateral flow
     """
-    # merge all reasons in the original column
-    df['Testgrund']=df['Testgrund'].mask(pd.isnull, df["Testgrund_Schnelltest"])
-    reasons = df["Testgrund"].value_counts()
-    return reasons
+    pcr_reasons = df["Testgrund"].value_counts()
+    schnell_reasons = df["Testgrund_Schnelltest"].value_counts()
+    return schnell_reasons, pcr_reasons
