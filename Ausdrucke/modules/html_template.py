@@ -175,7 +175,7 @@ html_selbstauskunft = """
             
             <input style="margin-left: 0.5em;"  type="checkbox" name="" id=""><label style="margin-left: 0.5em;"  for="">Reisepass Ausweisnummer: </label>
             
-            <input style="margin-left: 0.5em;" size="25em;" value="______________" type="text" name="" id="">
+            <input style="margin-left: 0.5em;" size="25em;" value="___________________" type="text" name="" id="">
           </p> 
         </div>
 
@@ -185,7 +185,7 @@ html_selbstauskunft = """
         <span>geboren am</span>
         <input type="text" size="12em;" value="{{GF_Geburtsdatum}}">
         <span>in</span>
-        <input type="text" name="" id="">
+        <input type="text" name="" id="" value="_____________">
          wohnhaft in 
         <input type="text" value="{{GF_PLZ}} {{GF_Ort}}">
     </div>
